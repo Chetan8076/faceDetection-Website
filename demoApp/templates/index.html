@@ -14,8 +14,8 @@
  -->
 <!-- <img id ="image" src="{% static '1.png' %}">
 <button hidden="true" onclick='{% url "faceDetection" %}'></button> -->
-<iframe id="iframe" hidden="true"></iframe>
-<button onclick="quit">quit</button>
+<!-- <iframe id="iframe" style="visibility: hidden"></iframe> -->
+<button onclick="quit()">quit</button>
 </body>
 <!-- <script type="text/javascript">
 	var video =document.getElementById('camVideo');
@@ -84,15 +84,61 @@ function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
+
+	function reload() {
+		console.log('here');
+		document.getElementById('iframe').src += '';
+	}
 	
+	var reloadID = window.setInterval(function() {
+		// console.log('reload');
+		document.getElementById('iframe').src += '';
+		if(window.user_present == false)
+			clearInterval(reloadID);
+	}, 200);
+
 	$.ajax({
 		type:'GET',
+		// async: true,
 		url:'{% url "helperFunction" %}'
 	}).done(function(){
-		while(user_present){
-			$('#iframe').attr('hidden','false');
-			$('#iframe').attr('src','{% static "1.png"}');
-		}
+		frame = document.createElement('iframe');
+		frame.setAttribute('id', 'iframe');
+		frame.setAttribute('frameborder', '0');
+		frame.setAttribute('width', '100%');
+		frame.setAttribute('src', '{% static "1.png" %}');
+		frame.style.height = "100vh";
+		frame.style.visibility = 'visible';
+		document.body.insertBefore(frame, document.body.firstChild);
+
+		// var updateID = setInterval(function() {
+		// 	// while(user_present){
+		// 	// 	// console.log('loop');
+		// 	// 	// // $('#iframe').attr('src','{% static "1.png" %}');
+		// 	// 	// var reloadID = setInterval(function() {
+		// 	// 	// 	console.log('here');
+		// 	// 	// 	document.getElementById('iframe').src += '';
+		// 	// 	// }, 1000);
+
+		// 	// 	// var delayID = setInterval(function() {
+		// 	// 	// 	console.log('hello');
+		// 	// 	// }, 1000);
+
+		// 	// 	var start = Date.now(), now = start;
+		// 	// 	while(now-start < 2000 && user_present)
+		// 	// 		now = Date.now();
+
+		// 	// 	// document.getElementById('iframe').reload();
+				
+		// 	// 	// $('#iframe').attr('visibility','visible');
+		// 	// 	// $('#iframe').attr('src','{% static "1.png" %}');
+		// 	// 	// console.log('hello');
+		// 	// }
+
+		// 	// clearInterval(updateID);
+		// 	// clearInterval(reloadID);
+		// 	// clearInterval(delayID);
+		// }, 300);
 
 	})
 	
