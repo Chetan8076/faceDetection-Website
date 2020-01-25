@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+	<title>index</title>
+</head>
+<body>
+	<!-- <center><video id="camVideo">
+		
+	</video></center>
+	<form action="/faceDetection" method="get">
+	<center><button type="submit" >Live Face Detection</button></center> -->
+<!-- </form>
+ -->
+<!-- <img id ="image" src="{% static '1.png' %}">
+<button hidden="true" onclick='{% url "faceDetection" %}'></button> -->
+<iframe id="iframe" hidden="true"></iframe>
+<button onclick="quit">quit</button>
+</body>
+<!-- <script type="text/javascript">
+	var video =document.getElementById('camVideo');
+	var delay=3000;
+	var loc = window.location.pathname;
+	
+	navigator.getUserMedia=navigator.getUserMedia|| navigator.webkitGetUseMedia || navigator.mozGetUserMedia ||navigator.oGetUserMedia||navigator.msGetUserMedia;
+	if(navigator.getUserMedia){
+		navigator.getUserMedia({video:true},streamWebCam,throwError);
+	}
+	function streamWebCam(stream){
+		// video.src = window.URL.createObjectURL(stream);
+		video.srcObject =stream;
+		while(i>0){
+			window.setTimeout( function(){
+				var canvas=document.createElement('canvas');
+				var context=canvas.getContext('2d');
+				canvas.width=video.clientWidth;
+				canvas.height=video.clientHeight;
+				context.drawImage(video,0,0);
+				var link=document.createElement("a");
+	            link.href=canvas.toDataURL('image/jpg');   //function blocks CORS
+	            link.save ='screenshot.jpg';
+	            // console.log(loc)
+	            link.click();}
+            ,delay);
+            i=i-1;
+		
+
+	}
+		video.play();
+	}
+	function throwError(e) {
+		alert(e.name);
+	}
+	var i=10;
+	
+</script> -->
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<script type="text/javascript">
+	var user_present=true;
+	function quit(){
+		$.ajax({
+			type:'GET',
+			url:'{% url "userQuits"%}'
+		}).done(function(){
+			window.user_present=false;
+		})
+		
+	}
+	function getCookie(cname) {
+     var name = cname + "=";
+     var ca = document.cookie.split(';');
+     for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if(c.indexOf(name) == 0)
+           return c.substring(name.length,c.length);
+     }
+     return "";
+}
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+	
+	$.ajax({
+		type:'GET',
+		url:'{% url "helperFunction" %}'
+	}).done(function(){
+		while(user_present){
+			$('#iframe').attr('hidden','false');
+			$('#iframe').attr('src','{% static "1.png"}');
+		}
+
+	})
+	
+</script>
+</html>
